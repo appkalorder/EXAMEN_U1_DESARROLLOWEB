@@ -23,11 +23,19 @@ class ComputadorController extends Controller
 
     public function create()
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('computadores.index')
+                ->with('error', 'No tienes permisos para realizar esta acción.');
+        }
         return view('computadores.create');
     }
 
     public function store(Request $request)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('computadores.index')
+                ->with('error', 'No tienes permisos para realizar esta acción.');
+        }
         $request->validate([
             'codigo_tienda' => 'required|unique:computadores',
             'procesador' => 'required',
@@ -58,8 +66,12 @@ class ComputadorController extends Controller
 
     public function edit(Computador $computador)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('computadores.index')
+                ->with('error', 'No tienes permisos para realizar esta acción.');
+        }
         return view('computadores.edit', compact('computador'));
-    }
+    }   
 
     public function update(Request $request, Computador $computador)
     {
